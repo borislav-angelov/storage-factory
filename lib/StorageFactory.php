@@ -23,7 +23,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @category  Databases
+ * @category  FileSystem
  * @package   StorageFactory
  * @author    Yani Iliev <yani@iliev.me>
  * @author    Bobby Angelov <bobby@servmask.com>
@@ -36,7 +36,7 @@
 /**
  * Factory Main class
  *
- * @category  Databases
+ * @category  FileSystem
  * @package   StorageFactory
  * @author    Yani Iliev <yani@iliev.me>
  * @author    Bobby Angelov <bobby@servmask.com>
