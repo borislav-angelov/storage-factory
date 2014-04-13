@@ -24,26 +24,26 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Databases
- * @package   MysqlDumpFactory
+ * @package   StorageFactory
  * @author    Yani Iliev <yani@iliev.me>
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
- * @license   https://raw.github.com/yani-/mysqldump-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.10
- * @link      https://github.com/yani-/mysqldump-factory/
+ * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
+ * @version   GIT: 1.0.0
+ * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
 /**
  * Factory Main class
  *
  * @category  Databases
- * @package   MysqlDumpFactory
+ * @package   StorageFactory
  * @author    Yani Iliev <yani@iliev.me>
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
- * @license   https://raw.github.com/yani-/mysqldump-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.10
- * @link      https://github.com/yani-/mysqldump-factory/
+ * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
+ * @version   GIT: 1.0.0
+ * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFactory
 {
