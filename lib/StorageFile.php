@@ -65,21 +65,6 @@ class StorageFile extends StorageAbstract
     }
 
     /**
-     * Get storage absolute path
-     *
-     * @return mixed
-     */
-    public function getRootPath() {
-        if (defined('STORAGE_PATH') && $this->isAccessible(STORAGE_PATH)) {
-            return STORAGE_PATH;
-        } else if ($this->isAccessible(sys_get_temp_dir())) {
-            return sys_get_temp_dir();
-        } else {
-            throw new Exception('Storage directory is not accessible (read/write).');
-        }
-    }
-
-    /**
      * Delete file
      *
      * @return boolean

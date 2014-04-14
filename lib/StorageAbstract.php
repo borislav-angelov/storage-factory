@@ -70,12 +70,27 @@ abstract class StorageAbstract
     abstract public function delete();
 
     /**
+     * Get storage absolute path
+     *
+     * @return mixed
+     */
+    public static function getRootPath() {
+        if (defined('STORAGE_PATH') && self::isAccessible(STORAGE_PATH)) {
+            return STORAGE_PATH;
+        } else if (self::isAccessible(sys_get_temp_dir())) {
+            return sys_get_temp_dir();
+        } else {
+            throw new Exception('Storage directory is not accessible (read/write).');
+        }
+    }
+
+    /**
      * Is path accessible (read/write)
      *
      * @param  string  Absolute path
      * @return boolean Path is accessible or not
      */
-    protected function isAccessible($path) {
+    public static function isAccessible($path) {
         return is_readable($path) && is_writable($path);
     }
 }

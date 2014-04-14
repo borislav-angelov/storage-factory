@@ -56,7 +56,9 @@ class StorageDirectory extends StorageAbstract
      */
     public function __construct() {
         $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid();
-        mkdir($this->directory);
+        if (!is_dir($this->directory)) {
+            @mkdir($this->directory);
+        }
     }
 
     /**
@@ -66,25 +68,10 @@ class StorageDirectory extends StorageAbstract
      * @return mixed
      */
     public function getAs($type = 'string') {
-        if ( $type === 'string' ) {
+        if ($type === 'string') {
             return $this->directory;
         } else {
-            throw new Exception( 'Unable to retrieve directory as ' . $type . '. Make sure the method is implemented' );
-        }
-    }
-
-    /**
-     * Get storage absolute path
-     *
-     * @return mixed
-     */
-    public function getRootPath() {
-        if (defined('STORAGE_PATH') && $this->isAccessible(STORAGE_PATH)) {
-            return STORAGE_PATH;
-        } else if ($this->isAccessible(sys_get_temp_dir())) {
-            return sys_get_temp_dir();
-        } else {
-            throw new Exception('Storage directory is not accessible (read/write).');
+            throw new Exception('Unable to retrieve directory as ' . $type . '. Make sure the method is implemented');
         }
     }
 
@@ -94,7 +81,7 @@ class StorageDirectory extends StorageAbstract
      * @return string
      */
     public function delete() {
-        return rmdir( $this->directory );
+        return @rmdir($this->directory);
     }
 
 }
