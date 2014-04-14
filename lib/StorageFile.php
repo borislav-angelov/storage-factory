@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
+ * @version   GIT: ..11.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
+ * @version   GIT: ..11.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFile extends StorageAbstract
@@ -62,21 +62,6 @@ class StorageFile extends StorageAbstract
      */
     public function getAs($type = 'resource') {
         return ($type === 'resource' ? fopen($this->file, 'w+') : $this->file);
-    }
-
-    /**
-     * Get storage absolute path
-     *
-     * @return mixed
-     */
-    public function getRootPath() {
-        if (defined('STORAGE_PATH') && $this->isAccessible(STORAGE_PATH)) {
-            return STORAGE_PATH;
-        } else if ($this->isAccessible(sys_get_temp_dir())) {
-            return sys_get_temp_dir();
-        } else {
-            throw new Exception('Storage directory is not accessible (read/write).');
-        }
     }
 
     /**
