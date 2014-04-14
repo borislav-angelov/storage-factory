@@ -58,7 +58,7 @@ class StorageFile implements StorageInterface
      *
      * @return mixed
      */
-    public function getAs( $type = 'resource' ) {
+    public function getAs($type = 'resource') {
         return ($type === 'resource' ? fopen($this->file, 'w+') : $this->file);
     }
 
