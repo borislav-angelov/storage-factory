@@ -57,6 +57,13 @@ interface StorageInterface
     public function getAs($type = 'resource');
 
     /**
+     * Get storage absolute path
+     *
+     * @return mixed
+     */
+    public function getRootPath();
+
+    /**
      * Delete a file or directory
      *
      * @return string

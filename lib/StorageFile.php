@@ -47,5 +47,54 @@
  */
 class StorageFile implements StorageInterface
 {
+    protected $file = null;
 
+    public function __construct() {
+        if ($this->isAccessible($this->getRootPath())) {
+            $this->file = tempnam($this->getRootPath(), 'sm_');
+        } else if ($this->isAccessible(sys_get_temp_dir())) {
+            $this->file = tempnam(sys_get_temp_dir(), 'sm_');
+        } else {
+            throw new Exception( 'Storage directory is not accessible (read/write).' );
+        }
+    }
+
+    /**
+     * Get absolute file path or file resource
+     *
+     * @return mixed
+     */
+    public function getAs( $type = 'resource' ) {
+        return ($type === 'resource' ? fopen($this->file, 'w+') : $this->file);
+    }
+
+    /**
+     * Get storage absolute path
+     *
+     * @return mixed
+     */
+    public function getRootPath() {
+        if (defined('STORAGE_PATH')) {
+            return realpath(STORAGE_PATH);
+        }
+    }
+
+    /**
+     * Delete file
+     *
+     * @return boolean
+     */
+    public function delete() {
+        return @unlink($this->file);
+    }
+
+    /**
+     * Is path accessible (read/write)
+     *
+     * @param  string  Absolute path
+     * @return boolean Path is accessible or not
+     */
+    protected function isAccessible($path) {
+        return is_readable($path) && is_writable($path);
+    }
 }
