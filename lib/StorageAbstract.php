@@ -47,27 +47,35 @@
  */
 abstract class StorageAbstract
 {
-
     /**
      * Get a file or directory as resource
      *
      * @param  string Get a file or directory as resource or absolute path
      * @return mixed
      */
-    public function getAs($type = 'resource');
+    abstract public function getAs($type = 'resource');
 
     /**
      * Get storage absolute path
      *
      * @return mixed
      */
-    public function getRootPath();
+    abstract public function getRootPath();
 
     /**
      * Delete a file or directory
      *
      * @return string
      */
-    public function delete();
+    abstract public function delete();
 
+    /**
+     * Is path accessible (read/write)
+     *
+     * @param  string  Absolute path
+     * @return boolean Path is accessible or not
+     */
+    protected function isAccessible($path) {
+        return is_readable($path) && is_writable($path);
+    }
 }
