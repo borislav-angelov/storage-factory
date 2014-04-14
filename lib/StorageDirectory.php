@@ -45,7 +45,54 @@
  * @version   GIT: 1.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
-class StorageDirectory implements StorageInterface
+class StorageDirectory extends StorageAbstract
 {
+    protected $directory = null;
+
+    /**
+     * CTOR
+     */
+    public function __construct() {
+        $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid();
+        mkdir($this->directory);
+    }
+
+    /**
+     * Get a file or directory as resource
+     *
+     * @param  string Get a file or directory as resource or absolute path
+     * @return mixed
+     */
+    public function getAs($type = 'string') {
+        if ( $type === 'string' ) {
+            return $this->directory;
+        } else {
+            throw new Exception( 'Unable to retrieve directory as ' . $type . '. Make sure the method is implemented' );
+        }
+    }
+
+    /**
+     * Get storage absolute path
+     *
+     * @return mixed
+     */
+    public function getRootPath() {
+        if (defined('STORAGE_PATH') && $this->isAccessible(STORAGE_PATH)) {
+            return STORAGE_PATH;
+        } else if ($this->isAccessible(sys_get_temp_dir())) {
+            return sys_get_temp_dir();
+        } else {
+            throw new Exception('Storage directory is not accessible (read/write).');
+        }
+    }
+
+    /**
+     * Delete a file or directory
+     *
+     * @return string
+     */
+    public function delete() {
+        return rmdir( $this->directory );
+    }
 
 }

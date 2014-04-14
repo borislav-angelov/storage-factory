@@ -45,7 +45,7 @@
  * @version   GIT: 1.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
-class StorageFile implements StorageInterface
+class StorageFile extends StorageAbstract
 {
     protected $file = null;
 
