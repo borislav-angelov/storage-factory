@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Storage interface
+ * StorageAbstract class
  *
  * PHP version 5
  *
@@ -34,7 +34,7 @@
  */
 
 /**
- * Storage interface
+ * StorageAbstract class
  *
  * @category  FileSystem
  * @package   StorageFactory
@@ -45,7 +45,7 @@
  * @version   GIT: 1.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
-interface StorageInterface
+abstract class StorageAbstract
 {
 
     /**

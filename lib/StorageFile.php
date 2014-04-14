@@ -85,14 +85,4 @@ class StorageFile implements StorageInterface
     public function delete() {
         return @unlink($this->file);
     }
-
-    /**
-     * Is path accessible (read/write)
-     *
-     * @param  string  Absolute path
-     * @return boolean Path is accessible or not
-     */
-    protected function isAccessible($path) {
-        return is_readable($path) && is_writable($path);
-    }
 }
