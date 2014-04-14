@@ -50,13 +50,7 @@ class StorageFile implements StorageInterface
     protected $file = null;
 
     public function __construct() {
-        if ($this->isAccessible($this->getRootPath())) {
-            $this->file = tempnam($this->getRootPath(), 'sm_');
-        } else if ($this->isAccessible(sys_get_temp_dir())) {
-            $this->file = tempnam(sys_get_temp_dir(), 'sm_');
-        } else {
-            throw new Exception( 'Storage directory is not accessible (read/write).' );
-        }
+        $this->file = tempnam($this->getRootPath(), 'sm_');
     }
 
     /**
@@ -74,8 +68,12 @@ class StorageFile implements StorageInterface
      * @return mixed
      */
     public function getRootPath() {
-        if (defined('STORAGE_PATH')) {
-            return realpath(STORAGE_PATH);
+        if (defined('STORAGE_PATH') && $this->isAccessible(STORAGE_PATH)) {
+            return STORAGE_PATH;
+        } else if ($this->isAccessible(sys_get_temp_dir())) {
+            return sys_get_temp_dir();
+        } else {
+            throw new Exception('Storage directory is not accessible (read/write).');
         }
     }
 
