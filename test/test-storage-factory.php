@@ -61,7 +61,7 @@ class StorageFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testMakeDirectoryStorage()
     {
-        $fileStorage = StorageFactory::make();
+        $fileStorage = StorageFactory::make(true);
         $this->assertTrue($fileStorage instanceof StorageDirectory);
     }
 }

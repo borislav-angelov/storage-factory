@@ -33,6 +33,8 @@
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
+
 /**
  * StorageDirectory class
  *
