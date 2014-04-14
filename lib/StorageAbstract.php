@@ -56,13 +56,6 @@ abstract class StorageAbstract
     abstract public function getAs($type = 'resource');
 
     /**
-     * Get storage absolute path
-     *
-     * @return mixed
-     */
-    abstract public function getRootPath();
-
-    /**
      * Delete a file or directory
      *
      * @return string
