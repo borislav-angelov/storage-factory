@@ -52,7 +52,10 @@ class StorageFile extends StorageAbstract
     protected $file = null;
 
     public function __construct() {
-        $this->file = tempnam($this->getRootPath(), 'sm_');
+        $this->file = tempnam(
+            $this->getRootPath(),
+            (defined('AI1WM_STORAGE_PREFIX') ? AI1WM_STORAGE_PREFIX : 'sm_')
+        );
     }
 
     /**
@@ -60,8 +63,8 @@ class StorageFile extends StorageAbstract
      *
      * @return mixed
      */
-    public function getAs($type = 'resource') {
-        return ($type === 'resource' ? fopen($this->file, 'w+') : $this->file);
+    public function getAs($type = 'string') {
+        return ($type === 'string' ? $this->file : fopen($this->file, 'w+'));
     }
 
     /**
@@ -70,6 +73,6 @@ class StorageFile extends StorageAbstract
      * @return boolean
      */
     public function delete() {
-        return @unlink($this->file);
+        return unlink($this->file);
     }
 }

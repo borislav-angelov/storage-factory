@@ -57,7 +57,7 @@ class StorageDirectory extends StorageAbstract
     public function __construct() {
         $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid();
         if (!is_dir($this->directory)) {
-            @mkdir($this->directory);
+            mkdir($this->directory);
         }
     }
 
@@ -81,7 +81,7 @@ class StorageDirectory extends StorageAbstract
      * @return string
      */
     public function delete() {
-        return @rmdir($this->directory);
+        return rmdir($this->directory);
     }
 
 }
