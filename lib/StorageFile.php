@@ -51,6 +51,9 @@ class StorageFile extends StorageAbstract
 {
     protected $file = null;
 
+    /**
+     * CTOR
+     */
     public function __construct() {
         $this->file = tempnam(
             $this->getRootPath(),
