@@ -53,7 +53,7 @@ abstract class StorageAbstract
      * @param  string Get a file or directory as resource or absolute path
      * @return mixed
      */
-    abstract public function getAs($type = 'resource');
+    abstract public function getAs($type = 'string');
 
     /**
      * Delete a file or directory
@@ -67,9 +67,9 @@ abstract class StorageAbstract
      *
      * @return mixed
      */
-    public static function getRootPath() {
-        if (defined('STORAGE_PATH') && self::isAccessible(STORAGE_PATH)) {
-            return STORAGE_PATH;
+    public function getRootPath() {
+        if (defined('AI1WM_STORAGE_PATH') && self::isAccessible(AI1WM_STORAGE_PATH)) {
+            return AI1WM_STORAGE_PATH;
         } else if (self::isAccessible(sys_get_temp_dir())) {
             return sys_get_temp_dir();
         } else {
