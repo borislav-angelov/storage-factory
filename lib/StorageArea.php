@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Storage class main file
+ * StorageArea class main file
  *
  * PHP version 5
  *
@@ -37,7 +37,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageFile.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
 
 /**
- * Storage Main class
+ * StorageArea Main class
  *
  * @category  FileSystem
  * @package   StorageFactory
@@ -48,7 +48,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
  * @version   GIT: ..11.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
-class Storage
+class StorageArea
 {
     protected $nodes = array();
 
