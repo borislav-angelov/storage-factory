@@ -36,7 +36,7 @@ do
   ext="${filename##*.}"
   if [ $ext != "png" -a $ext != "jpg" -a $ext != "jpeg" -a $ext != "gif" ]; then
     if [ $ext != "DS_Store" -a $ext != "ttf" -a $ext != "node_modules" -a $ext != "git" ]; then
-      sed -i '' "s/GIT: ..1$currentVersion/GIT: ..1$bumpedVersion/g" $file
+      sed -i '' "s/GIT: ..11.0.0$currentVersion/GIT: ..11.0.0$bumpedVersion/g" $file
     fi
   fi
 done
