@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Factory class main file
+ * Storage class main file
  *
  * PHP version 5
  *
@@ -33,8 +33,11 @@
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageFile.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
+
 /**
- * Factory Main class
+ * Storage Main class
  *
  * @category  FileSystem
  * @package   StorageFactory
@@ -45,25 +48,40 @@
  * @version   GIT: ..11.0.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
-class StorageFactory
+class Storage
 {
-    public static function make($isDir = false)
-    {
-        // is directory ?
-        if ($isDir) {
-            require_once
-                dirname(__FILE__) .
-                DIRECTORY_SEPARATOR .
-                'StorageDirectory.php';
+    protected $nodes = array();
 
-            return new StorageDirectory;
-        } else {
-            require_once
-                dirname(__FILE__) .
-                DIRECTORY_SEPARATOR .
-                'StorageFile.php';
+    /**
+     * Create a file with unique name
+     *
+     * @return StorageFile
+     */
+    public function makeFile() {
+        $this->nodes[] = $node = new StorageFile;
 
-            return new StorageFile;
+        return $node;
+    }
+
+    /**
+     * Create a directory with unique name
+     *
+     * @return StorageDirectory
+     */
+    public function makeDirectory() {
+        $this->nodes[] = $node = new StorageDirectory;
+
+        return $node;
+    }
+
+    /**
+     * Remove all files and directories in the current storage
+     *
+     * @return void
+     */
+    public function flush() {
+        foreach ($this->nodes as $node) {
+            $node->delete();
         }
     }
 }
