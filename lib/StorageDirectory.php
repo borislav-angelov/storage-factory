@@ -55,7 +55,7 @@ class StorageDirectory extends StorageAbstract
      * CTOR
      */
     public function __construct() {
-        $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid();
+        $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
         if (!is_dir($this->directory)) {
             mkdir($this->directory);
         }
@@ -78,10 +78,24 @@ class StorageDirectory extends StorageAbstract
     /**
      * Delete a file or directory
      *
-     * @return string
+     * @return void
      */
     public function delete() {
-        return rmdir($this->directory);
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator( $this->directory ),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ( $iterator as $item ) {
+            // Skip dots
+            if ( $iterator->isDot() ) continue;
+
+            if ( $item->isDir() ) {
+                rmdir( $this->directory . $iterator->getSubPathName() );
+            } else {
+                unlink( $this->directory . $iterator->getSubPathName() );
+            }
+        }
     }
 
 }
