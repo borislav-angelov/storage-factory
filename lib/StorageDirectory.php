@@ -54,8 +54,14 @@ class StorageDirectory extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct() {
-        $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
+    public function __construct($name = null) {
+        if (empty($name)) {
+            $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
+        } else {
+            $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
+        }
+
+        // Create directory
         if (!is_dir($this->directory)) {
             mkdir($this->directory);
         }
