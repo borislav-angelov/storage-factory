@@ -71,7 +71,7 @@ class StorageFile extends StorageAbstract
      * @return mixed
      */
     public function getAs($type = 'string') {
-        return ($type === 'string' ? $this->file : fopen($this->file, 'w+'));
+        return ($type === 'string' ? $this->file : fopen($this->file, 'a+'));
     }
 
     /**
