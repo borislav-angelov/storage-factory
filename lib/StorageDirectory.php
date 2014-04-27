@@ -102,6 +102,8 @@ class StorageDirectory extends StorageAbstract
                 unlink( $this->directory . $iterator->getSubPathName() );
             }
         }
+
+        rmdir( $this->directory );
     }
 
 }
