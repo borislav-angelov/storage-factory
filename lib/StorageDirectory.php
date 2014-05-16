@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
+ * @version   GIT: 1.5.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
+ * @version   GIT: 1.5.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageDirectory extends StorageAbstract
@@ -82,28 +82,45 @@ class StorageDirectory extends StorageAbstract
     }
 
     /**
+     * Delete a file or directory from a given path
+     *
+     * @param  string  $path Absolute path
+     * @return boolean
+     */
+    public static function flush($path) {
+        if (self::isAccessible($path)) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $item) {
+                // Skip dots
+                if ($iterator->isDot()) continue;
+
+                if ($item->isDir()) {
+                    rmdir($path . $iterator->getSubPathName());
+                } else {
+                    unlink($path . $iterator->getSubPathName());
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Delete a file or directory
      *
      * @return void
      */
     public function delete() {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator( $this->directory ),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ( $iterator as $item ) {
-            // Skip dots
-            if ( $iterator->isDot() ) continue;
-
-            if ( $item->isDir() ) {
-                rmdir( $this->directory . $iterator->getSubPathName() );
-            } else {
-                unlink( $this->directory . $iterator->getSubPathName() );
-            }
+        // Remove child files and directories
+        if (self::flush($this->directory)) {
+            rmdir($this->directory);
         }
-
-        rmdir( $this->directory );
     }
 
 }
