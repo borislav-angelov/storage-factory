@@ -82,28 +82,45 @@ class StorageDirectory extends StorageAbstract
     }
 
     /**
+     * Delete a file or directory from a given path
+     *
+     * @param  string  $path Absolute path
+     * @return boolean
+     */
+    public static function flush($path) {
+        if (self::isAccessible($path)) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $item) {
+                // Skip dots
+                if ($iterator->isDot()) continue;
+
+                if ($item->isDir()) {
+                    rmdir($path . $iterator->getSubPathName());
+                } else {
+                    unlink($path . $iterator->getSubPathName());
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Delete a file or directory
      *
      * @return void
      */
     public function delete() {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator( $this->directory ),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ( $iterator as $item ) {
-            // Skip dots
-            if ( $iterator->isDot() ) continue;
-
-            if ( $item->isDir() ) {
-                rmdir( $this->directory . $iterator->getSubPathName() );
-            } else {
-                unlink( $this->directory . $iterator->getSubPathName() );
-            }
+        // Remove child files and directories
+        if (self::flush($this->directory)) {
+            rmdir($this->directory);
         }
-
-        rmdir( $this->directory );
     }
 
 }
