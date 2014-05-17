@@ -88,6 +88,7 @@ class StorageDirectory extends StorageAbstract
      * @return boolean
      */
     public static function flush($path) {
+        $path = realpath($path);
         if (self::isAccessible($path)) {
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($path),
@@ -99,9 +100,9 @@ class StorageDirectory extends StorageAbstract
                 if ($iterator->isDot()) continue;
 
                 if ($item->isDir()) {
-                    rmdir($path . $iterator->getSubPathName());
+                    rmdir($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
                 } else {
-                    unlink($path . $iterator->getSubPathName());
+                    unlink($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
                 }
             }
 
