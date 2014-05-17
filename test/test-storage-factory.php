@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.5.0
+ * @version   GIT: 1.6.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -42,18 +42,26 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.5.0
+ * @version   GIT: 1.6.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFactoryTest extends PHPUnit_Framework_TestCase
 {
+    protected $storage = null;
+
+    protected function setUp()
+    {
+        $this->storage = new StorageArea;
+    }
+
     /**
      * @return [type] [description]
      */
     public function testMakeFileStorage()
     {
-        $fileStorage = StorageFactory::make();
-        $this->assertTrue($fileStorage instanceof StorageFile);
+        $file = $this->storage->makeFile();
+
+        $this->assertTrue($file instanceof StorageFile);
     }
 
     /**
@@ -61,7 +69,13 @@ class StorageFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testMakeDirectoryStorage()
     {
-        $fileStorage = StorageFactory::make(true);
-        $this->assertTrue($fileStorage instanceof StorageDirectory);
+        $directory = $this->storage->makeDirectory();
+
+        $this->assertTrue($directory instanceof StorageDirectory);
+    }
+
+    protected function tearDown()
+    {
+        $this->storage->flush();
     }
 }
