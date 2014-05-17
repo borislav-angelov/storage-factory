@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.6.0
+ * @version   GIT: 1.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.6.0
+ * @version   GIT: 1.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageDirectory extends StorageAbstract
@@ -88,6 +88,7 @@ class StorageDirectory extends StorageAbstract
      * @return boolean
      */
     public static function flush($path) {
+        $path = realpath($path);
         if (self::isAccessible($path)) {
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($path),
@@ -99,9 +100,9 @@ class StorageDirectory extends StorageAbstract
                 if ($iterator->isDot()) continue;
 
                 if ($item->isDir()) {
-                    rmdir($path . $iterator->getSubPathName());
+                    rmdir($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
                 } else {
-                    unlink($path . $iterator->getSubPathName());
+                    unlink($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
                 }
             }
 
