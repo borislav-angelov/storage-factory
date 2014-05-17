@@ -47,13 +47,21 @@
  */
 class StorageFactoryTest extends PHPUnit_Framework_TestCase
 {
+    protected $storage = null;
+
+    protected function setUp()
+    {
+        $this->storage = new StorageArea;
+    }
+
     /**
      * @return [type] [description]
      */
     public function testMakeFileStorage()
     {
-        $fileStorage = StorageFactory::make();
-        $this->assertTrue($fileStorage instanceof StorageFile);
+        $file = $this->storage->makeFile();
+
+        $this->assertTrue($file instanceof StorageFile);
     }
 
     /**
@@ -61,7 +69,13 @@ class StorageFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testMakeDirectoryStorage()
     {
-        $fileStorage = StorageFactory::make(true);
-        $this->assertTrue($fileStorage instanceof StorageDirectory);
+        $directory = $this->storage->makeDirectory();
+
+        $this->assertTrue($directory instanceof StorageDirectory);
+    }
+
+    protected function tearDown()
+    {
+        $this->storage->flush();
     }
 }
