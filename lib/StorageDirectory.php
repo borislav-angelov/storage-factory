@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.7.0
+ * @version   GIT: 1.8.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.7.0
+ * @version   GIT: 1.8.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageDirectory extends StorageAbstract
@@ -84,20 +84,43 @@ class StorageDirectory extends StorageAbstract
     /**
      * Delete a file or directory from a given path
      *
-     * @param  string  $path Absolute path
+     * @param  string  $path    Absolute path
+     * @param  array   $exclude Exclude files and directories
      * @return boolean
      */
-    public static function flush($path) {
-        $path = realpath($path);
+    public static function flush($path, $exclude = array()) {
         if (self::isAccessible($path)) {
+            // Use Recursive functions
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($path),
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
+            // Prepare filter pattern
+            $filter_pattern = null;
+            if (is_array($exclude)) {
+                $filters = array();
+                foreach ($exclude as $filter) {
+                    $filters[] = sprintf(
+                        '(%s(%s.*)?)',
+                        preg_quote( $filter, '/' ),
+                        preg_quote( DIRECTORY_SEPARATOR, '/' )
+                    );
+                }
+
+                $filter_pattern = implode( '|', $filters );
+            }
+
             foreach ($iterator as $item) {
                 // Skip dots
                 if ($iterator->isDot()) continue;
+
+                // Validate filter pattern
+                if ($filter_pattern) {
+                    if (preg_match('/^' . $filter_pattern . '$/', $iterator->getSubPathName())) {
+                        continue;
+                    }
+                }
 
                 if ($item->isDir()) {
                     rmdir($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());

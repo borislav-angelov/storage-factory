@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.7.0
+ * @version   GIT: 1.8.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -45,7 +45,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.7.0
+ * @version   GIT: 1.8.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageArea
@@ -82,13 +82,9 @@ class StorageArea
      * @param  string $path Remove all files and directories from given path
      * @return void
      */
-    public function flush($path = null) {
-        if ($path) {
-            StorageDirectory::flush($path);
-        } else {
-            foreach ($this->nodes as $node) {
-                $node->delete();
-            }
+    public function flush() {
+        foreach ($this->nodes as $node) {
+            $node->delete();
         }
     }
 }
