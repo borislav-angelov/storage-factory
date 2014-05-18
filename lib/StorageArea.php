@@ -82,13 +82,9 @@ class StorageArea
      * @param  string $path Remove all files and directories from given path
      * @return void
      */
-    public function flush($path = null) {
-        if ($path) {
-            StorageDirectory::flush($path);
-        } else {
-            foreach ($this->nodes as $node) {
-                $node->delete();
-            }
+    public function flush() {
+        foreach ($this->nodes as $node) {
+            $node->delete();
         }
     }
 }
