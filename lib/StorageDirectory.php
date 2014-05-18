@@ -81,6 +81,58 @@ class StorageDirectory extends StorageAbstract
         }
     }
 
+
+    /**
+     * Copy a file or directory from source to destination path
+     *
+     * @param  string $from    Copy files and directories FROM
+     * @param  string $to      Copy files and directories TO
+     * @param  array  $exclude List of directories to exclude
+     * @return void
+     */
+    public static function copy($from, $to, $exclude = array()) {
+        // Use Recursive functions
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($from),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        // Prepare filter pattern
+        $filter_pattern = null;
+        if (is_array($exclude)) {
+            $filters = array();
+            foreach ($exclude as $filter) {
+                $filters[] = sprintf(
+                    '(%s(%s.*)?)',
+                    preg_quote($filter, '/'),
+                    preg_quote(DIRECTORY_SEPARATOR, '/')
+                );
+            }
+
+            $filter_pattern = implode('|', $filters);
+        }
+
+        foreach ($iterator as $item) {
+            // Skip dots
+            if ($iterator->isDot()) {
+                continue;
+            }
+
+            // Validate filter pattern
+            if ($filter_pattern) {
+                if (preg_match('/^' . $filter_pattern . '$/', $iterator->getSubPathName())) {
+                    continue;
+                }
+            }
+
+            if ($item->isDir()) {
+                mkdir($to . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            } else {
+                copy($item, $to . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            }
+        }
+    }
+
     /**
      * Delete a file or directory from a given path
      *
@@ -89,50 +141,46 @@ class StorageDirectory extends StorageAbstract
      * @return boolean
      */
     public static function flush($path, $exclude = array()) {
-        if (self::isAccessible($path)) {
-            // Use Recursive functions
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($path),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
+        // Use Recursive functions
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
 
-            // Prepare filter pattern
-            $filter_pattern = null;
-            if (is_array($exclude)) {
-                $filters = array();
-                foreach ($exclude as $filter) {
-                    $filters[] = sprintf(
-                        '(%s(%s.*)?)',
-                        preg_quote( $filter, '/' ),
-                        preg_quote( DIRECTORY_SEPARATOR, '/' )
-                    );
-                }
-
-                $filter_pattern = implode( '|', $filters );
+        // Prepare filter pattern
+        $filter_pattern = null;
+        if (is_array($exclude)) {
+            $filters = array();
+            foreach ($exclude as $filter) {
+                $filters[] = sprintf(
+                    '(%s(%s.*)?)',
+                    preg_quote($filter, '/'),
+                    preg_quote(DIRECTORY_SEPARATOR, '/')
+                );
             }
 
-            foreach ($iterator as $item) {
-                // Skip dots
-                if ($iterator->isDot()) continue;
-
-                // Validate filter pattern
-                if ($filter_pattern) {
-                    if (preg_match('/^' . $filter_pattern . '$/', $iterator->getSubPathName())) {
-                        continue;
-                    }
-                }
-
-                if ($item->isDir()) {
-                    rmdir($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-                } else {
-                    unlink($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-                }
-            }
-
-            return true;
+            $filter_pattern = implode('|', $filters);
         }
 
-        return false;
+        foreach ($iterator as $item) {
+            // Skip dots
+            if ($iterator->isDot()) {
+                continue;
+            }
+
+            // Validate filter pattern
+            if ($filter_pattern) {
+                if (preg_match('/^' . $filter_pattern . '$/', $iterator->getSubPathName())) {
+                    continue;
+                }
+            }
+
+            if ($item->isDir()) {
+                rmdir($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            } else {
+                unlink($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            }
+        }
     }
 
     /**
@@ -142,9 +190,10 @@ class StorageDirectory extends StorageAbstract
      */
     public function delete() {
         // Remove child files and directories
-        if (self::flush($this->directory)) {
-            rmdir($this->directory);
-        }
+        self::flush($this->directory);
+
+        // Remove parent directory
+        rmdir($this->directory);
     }
 
 }
