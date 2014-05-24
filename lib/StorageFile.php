@@ -54,14 +54,25 @@ class StorageFile extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct($name = null) {
+    public function __construct($name = null, $path = null) {
         if (empty($name)) {
-            $this->file = tempnam(
-                $this->getRootPath(),
-                (defined('AI1WM_STORAGE_PREFIX') ? AI1WM_STORAGE_PREFIX : 'sm_')
-            );
+            if (empty($path)) {
+                $this->file = tempnam(
+                    $this->getRootPath(),
+                    (defined('AI1WM_STORAGE_PREFIX') ? AI1WM_STORAGE_PREFIX : 'sm_')
+                );
+            } else {
+                $this->file = tempnam(
+                    $path,
+                    (defined('AI1WM_STORAGE_PREFIX') ? AI1WM_STORAGE_PREFIX : 'sm_')
+                );
+            }
         } else {
-            $this->file = $this->getRootPath() . DIRECTORY_SEPARATOR . $name;
+            if (empty($path)) {
+                $this->file = $this->getRootPath() . DIRECTORY_SEPARATOR . $name;
+            } else {
+                $this->file = $path . DIRECTORY_SEPARATOR . $name;
+            }
         }
     }
 

@@ -56,10 +56,11 @@ class StorageArea
      * Create a file with unique name
      *
      * @param  string      $name Custom file name
+     * @param  string      $path Custom root path
      * @return StorageFile       StorageFile instance
      */
-    public function makeFile($name = null) {
-        $this->nodes[] = $node = new StorageFile($name);
+    public function makeFile($name = null, $path = null) {
+        $this->nodes[] = $node = new StorageFile($name, $path);
 
         return $node;
     }
@@ -68,10 +69,11 @@ class StorageArea
      * Create a directory with unique name
      *
      * @param  string           $name Custom directory name
+     * @param  string           $path Custom root path
      * @return StorageDirectory       StorageDirectory instance
      */
-    public function makeDirectory($name = null) {
-        $this->nodes[] = $node = new StorageDirectory($name);
+    public function makeDirectory($name = null, $path = null) {
+        $this->nodes[] = $node = new StorageDirectory($name, $path);
 
         return $node;
     }
