@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -42,38 +42,50 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 abstract class StorageAbstract
 {
     /**
-     * Get a file or directory as resource
-     *
-     * @param  string Get a file or directory as resource or absolute path
-     * @return mixed
-     */
-    abstract public function getAs($type = 'string');
-
-    /**
-     * Delete a file or directory
+     * Get file/directory name
      *
      * @return string
+     */
+    abstract public function getName();
+
+    /**
+     * Get file/directory resource
+     *
+     * @return resource
+     */
+    abstract public function getResource();
+
+    /**
+     * Delete file or directory
+     *
+     * @return boolean
      */
     abstract public function delete();
 
     /**
      * Get storage absolute path
      *
-     * @return mixed
+     * @return string
      */
     public function getRootPath() {
-        if (defined('AI1WM_STORAGE_PATH') && self::isAccessible(AI1WM_STORAGE_PATH)) {
-            return realpath(AI1WM_STORAGE_PATH);
-        } else if (self::isAccessible(sys_get_temp_dir())) {
-            return sys_get_temp_dir();
+        if (defined('AI1WM_STORAGE_PATH')) {
+            if (!is_dir(AI1WM_STORAGE_PATH)) {
+                mkdir(AI1WM_STORAGE_PATH);
+            }
+
+            if (self::isAccessible(AI1WM_STORAGE_PATH)) {
+                return realpath(AI1WM_STORAGE_PATH);
+            } else {
+                throw new Exception('Storage directory is not accessible (read/write).');
+            }
         } else {
-            throw new Exception('Storage directory is not accessible (read/write).');
+            throw new Exception('AI1WM_STORAGE_PATH is not defined.');
         }
     }
 

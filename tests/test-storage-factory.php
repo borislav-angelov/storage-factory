@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -42,7 +42,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFactoryTest extends PHPUnit_Framework_TestCase
@@ -51,7 +51,11 @@ class StorageFactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storage = new StorageArea;
+        if (!defined('AI1WM_STORAGE_PATH')) {
+            define('AI1WM_STORAGE_PATH', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'storage-factory');
+        }
+
+        $this->storage = StorageArea::getInstance();
     }
 
     /**

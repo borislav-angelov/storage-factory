@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageDirectory extends StorageAbstract
@@ -54,19 +54,11 @@ class StorageDirectory extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null) {
+    public function __construct($name = null) {
         if (empty($name)) {
-            if (empty($path)) {
-                $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
-            } else {
-                $this->directory = $path . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
-            }
+            $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
         } else {
-            if (empty($path)) {
-                $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
-            } else {
-                $this->directory = $path . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
-            }
+            $this->directory = $this->getRootPath() . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
         }
 
         // Create directory
@@ -76,30 +68,52 @@ class StorageDirectory extends StorageAbstract
     }
 
     /**
-     * Get a file or directory as resource
+     * Get directory name
      *
-     * @param  string Get a file or directory as resource or absolute path
-     * @return mixed
+     * @return string
      */
-    public function getAs($type = 'string') {
-        if ($type === 'string') {
-            return $this->directory;
-        } else {
-            throw new Exception('Unable to retrieve directory as ' . $type . '. Make sure the method is implemented');
+    public function getName() {
+        return $this->directory;
+    }
+
+    /**
+     * Get directory resource
+     *
+     * @return resource
+     */
+    public function getResource() {
+        return opendir($this->directory);
+    }
+
+    /**
+     * Delete directory
+     *
+     * @return boolean
+     */
+    public function delete() {
+        // Remove child files and directories
+        if (self::flush($this->directory)) {
+            return rmdir($this->directory);
         }
     }
 
-
     /**
-     * Copy a file or directory from source to destination path
+     * Recursive copy directory from source to destination path
      *
-     * @param  string $from    Copy files and directories FROM
-     * @param  string $to      Copy files and directories TO
-     * @param  array  $exclude List of directories to exclude
-     * @return void
+     * @param  string $from    From absolute path
+     * @param  string $to      To absolute path
+     * @param  array  $exclude Exclude files and directories
+     * @return boolean
      */
     public static function copy($from, $to, $exclude = array()) {
-        // Use Recursive functions
+        if (!self::isAccessible($from)) {
+            throw new Exception('From path is not accessible (read/write).');
+        }
+
+        if (!self::isAccessible($to)) {
+            throw new Exception('To path is not accessible (read/write).');
+        }
+
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($from),
             RecursiveIteratorIterator::SELF_FIRST
@@ -139,17 +153,22 @@ class StorageDirectory extends StorageAbstract
                 copy($item, $to . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
             }
         }
+
+        return true;
     }
 
     /**
-     * Delete a file or directory from a given path
+     * Recursive delete directory
      *
      * @param  string  $path    Absolute path
      * @param  array   $exclude Exclude files and directories
      * @return boolean
      */
     public static function flush($path, $exclude = array()) {
-        // Use Recursive functions
+        if (!self::isAccessible($path)) {
+            throw new Exception('Path is not accessible (read/write).');
+        }
+
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -189,19 +208,8 @@ class StorageDirectory extends StorageAbstract
                 unlink($path . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
             }
         }
-    }
 
-    /**
-     * Delete a file or directory
-     *
-     * @return void
-     */
-    public function delete() {
-        // Remove child files and directories
-        self::flush($this->directory);
-
-        // Remove parent directory
-        rmdir($this->directory);
+        return true;
     }
 
 }
