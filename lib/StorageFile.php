@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFile extends StorageAbstract
@@ -54,35 +54,39 @@ class StorageFile extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null) {
+    public function __construct($name = null) {
         if (empty($name)) {
-            if (empty($path)) {
-                $this->file = tempnam(
-                    $this->getRootPath(),
-                    (defined('AI1WM_STORAGE_PREFIX') ? AI1WM_STORAGE_PREFIX : 'sm_')
-                );
-            } else {
-                $this->file = tempnam(
-                    $path,
-                    (defined('AI1WM_STORAGE_PREFIX') ? AI1WM_STORAGE_PREFIX : 'sm_')
-                );
-            }
+            $this->file = tempnam($this->getRootPath(), null);
         } else {
-            if (empty($path)) {
-                $this->file = $this->getRootPath() . DIRECTORY_SEPARATOR . $name;
-            } else {
-                $this->file = $path . DIRECTORY_SEPARATOR . $name;
-            }
+            $this->file = $this->getRootPath() . DIRECTORY_SEPARATOR . $name;
         }
     }
 
     /**
-     * Get absolute file path or file resource
+     * Get file name
      *
-     * @return mixed
+     * @return string
      */
-    public function getAs($type = 'string') {
-        return ($type === 'string' ? $this->file : fopen($this->file, 'a+'));
+    public function getName() {
+        return $this->file;
+    }
+
+    /**
+     * Get file resource
+     *
+     * @return resource
+     */
+    public function getResource() {
+        return fopen($this->file, 'a+');
+    }
+
+    /**
+     * Get file size
+     *
+     * @return integer
+     */
+    public function getSize() {
+        return filesize($this->file);
     }
 
     /**

@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -45,48 +45,53 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 2.2.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageArea
 {
-    protected $nodes = array();
+    protected static $instance = null;
+
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct() {
+        // Singleton
+    }
 
     /**
      * Create a file with unique name
      *
      * @param  string      $name Custom file name
-     * @param  string      $path Custom root path
      * @return StorageFile       StorageFile instance
      */
-    public function makeFile($name = null, $path = null) {
-        $this->nodes[] = $node = new StorageFile($name, $path);
-
-        return $node;
+    public function makeFile($name = null) {
+        return new StorageFile($name);
     }
 
     /**
      * Create a directory with unique name
      *
      * @param  string           $name Custom directory name
-     * @param  string           $path Custom root path
      * @return StorageDirectory       StorageDirectory instance
      */
-    public function makeDirectory($name = null, $path = null) {
-        $this->nodes[] = $node = new StorageDirectory($name, $path);
-
-        return $node;
+    public function makeDirectory($name = null) {
+        return new StorageDirectory($name);
     }
 
     /**
-     * Remove all files and directories in the current storage
+     * Delete all files and directories in the storage
      *
-     * @param  string $path Remove all files and directories from given path
-     * @return void
+     * @return boolean
      */
     public function flush() {
-        foreach ($this->nodes as $node) {
-            $node->delete();
+        if (defined('AI1WM_STORAGE_PATH')) {
+            return StorageDirectory::flush(AI1WM_STORAGE_PATH);
         }
     }
 }
