@@ -29,12 +29,13 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.2.0
+ * @version   GIT: 2.3.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageFile.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageUtility.php';
 
 /**
  * StorageArea Main class
@@ -45,7 +46,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageDirectory.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.2.0
+ * @version   GIT: 2.3.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageArea
@@ -64,6 +65,29 @@ class StorageArea
         // Singleton
     }
 
+
+    /**
+     * Get storage absolute path
+     *
+     * @return string
+     */
+    public function getRootPath() {
+        if (defined('AI1WM_STORAGE_PATH')) {
+            if (!is_dir(AI1WM_STORAGE_PATH)) {
+                mkdir(AI1WM_STORAGE_PATH);
+            }
+
+            // Verify permissions
+            if (is_readable(AI1WM_STORAGE_PATH) && is_writable(AI1WM_STORAGE_PATH)) {
+                return realpath(AI1WM_STORAGE_PATH);
+            } else {
+                throw new Exception('Storage directory is not accessible (read/write).');
+            }
+        } else {
+            throw new Exception('AI1WM_STORAGE_PATH is not defined.');
+        }
+    }
+
     /**
      * Create a file with unique name
      *
@@ -71,7 +95,7 @@ class StorageArea
      * @return StorageFile       StorageFile instance
      */
     public function makeFile($name = null) {
-        return new StorageFile($name);
+        return new StorageFile($name, $this->getRootPath());
     }
 
     /**
@@ -81,7 +105,7 @@ class StorageArea
      * @return StorageDirectory       StorageDirectory instance
      */
     public function makeDirectory($name = null) {
-        return new StorageDirectory($name);
+        return new StorageDirectory($name, $this->getRootPath());
     }
 
     /**
@@ -90,8 +114,6 @@ class StorageArea
      * @return boolean
      */
     public function flush() {
-        if (defined('AI1WM_STORAGE_PATH')) {
-            return StorageDirectory::flush(AI1WM_STORAGE_PATH);
-        }
+        return StorageUtility::flush($this->getRootPath());
     }
 }
