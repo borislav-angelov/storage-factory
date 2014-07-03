@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.2.0
+ * @version   GIT: 2.3.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -42,7 +42,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.2.0
+ * @version   GIT: 2.3.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 abstract class StorageAbstract
@@ -62,40 +62,9 @@ abstract class StorageAbstract
     abstract public function getResource();
 
     /**
-     * Delete file or directory
+     * Delete file/directory
      *
      * @return boolean
      */
     abstract public function delete();
-
-    /**
-     * Get storage absolute path
-     *
-     * @return string
-     */
-    public function getRootPath() {
-        if (defined('AI1WM_STORAGE_PATH')) {
-            if (!is_dir(AI1WM_STORAGE_PATH)) {
-                mkdir(AI1WM_STORAGE_PATH);
-            }
-
-            if (self::isAccessible(AI1WM_STORAGE_PATH)) {
-                return realpath(AI1WM_STORAGE_PATH);
-            } else {
-                throw new Exception('Storage directory is not accessible (read/write).');
-            }
-        } else {
-            throw new Exception('AI1WM_STORAGE_PATH is not defined.');
-        }
-    }
-
-    /**
-     * Is path accessible (read/write)
-     *
-     * @param  string  Absolute path
-     * @return boolean Path is accessible or not
-     */
-    public static function isAccessible($path) {
-        return is_readable($path) && is_writable($path);
-    }
 }
