@@ -48,6 +48,16 @@
 class StorageUtility
 {
     /**
+     * Is path accessible (read/write)
+     *
+     * @param  string  Absolute path
+     * @return boolean
+     */
+    public static function isAccessible($path) {
+        return is_readable($path) && is_writable($path);
+    }
+
+    /**
      * Recursive copy directory from source to destination path
      *
      * @param  string $from    From absolute path

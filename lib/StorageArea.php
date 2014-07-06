@@ -78,8 +78,8 @@ class StorageArea
             }
 
             // Verify permissions
-            if (is_readable(AI1WM_STORAGE_PATH) && is_writable(AI1WM_STORAGE_PATH)) {
-                return realpath(AI1WM_STORAGE_PATH);
+            if (StorageUtility::isAccessible(AI1WM_STORAGE_PATH)) {
+                return realpath(AI1WM_STORAGE_PATH) . DIRECTORY_SEPARATOR;
             } else {
                 throw new Exception('Storage directory is not accessible (read/write).');
             }
