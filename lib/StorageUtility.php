@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.3.0
+ * @version   GIT: 2.4.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -42,11 +42,21 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.3.0
+ * @version   GIT: 2.4.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageUtility
 {
+    /**
+     * Is path accessible (read/write)
+     *
+     * @param  string  Absolute path
+     * @return boolean
+     */
+    public static function isAccessible($path) {
+        return is_readable($path) && is_writable($path);
+    }
+
     /**
      * Recursive copy directory from source to destination path
      *
