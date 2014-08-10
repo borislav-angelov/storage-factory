@@ -79,9 +79,11 @@ class StorageArea
 
             // Verify permissions
             if (StorageUtility::isAccessible(AI1WM_STORAGE_PATH)) {
-                $indexFile = AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . AI1WM_STORAGE_INDEX;
-                if (defined('AI1WM_STORAGE_INDEX') && !is_file($indexFile)) {
-                    @touch($indexFile);
+                if (defined('AI1WM_STORAGE_INDEX')) {
+                    $indexFile = AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . AI1WM_STORAGE_INDEX;
+                    if (!is_file($indexFile)) {
+                        @touch($indexFile);
+                    }
                 }
 
                 return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR;
