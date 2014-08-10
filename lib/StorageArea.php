@@ -79,11 +79,12 @@ class StorageArea
 
             // Verify permissions
             if (StorageUtility::isAccessible(AI1WM_STORAGE_PATH)) {
-                if (defined('AI1WM_STORAGE_INDEX') && !is_file(AI1WM_STORAGE_INDEX)) {
-                    @touch(AI1WM_STORAGE_INDEX);
+                $indexFile = AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . AI1WM_STORAGE_INDEX;
+                if (defined('AI1WM_STORAGE_INDEX') && !is_file($indexFile)) {
+                    @touch($indexFile);
                 }
 
-                return realpath(AI1WM_STORAGE_PATH) . DIRECTORY_SEPARATOR;
+                return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR;
             } else {
                 throw new Exception('Storage directory is not accessible (read/write).');
             }
