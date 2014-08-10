@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.5.0
+ * @version   GIT: 2.6.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -46,7 +46,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageUtility.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.5.0
+ * @version   GIT: 2.6.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageArea
@@ -79,11 +79,14 @@ class StorageArea
 
             // Verify permissions
             if (StorageUtility::isAccessible(AI1WM_STORAGE_PATH)) {
-                if (defined('AI1WM_STORAGE_INDEX') && !is_file(AI1WM_STORAGE_INDEX)) {
-                    @touch(AI1WM_STORAGE_INDEX);
+                if (defined('AI1WM_STORAGE_INDEX')) {
+                    $index = AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . AI1WM_STORAGE_INDEX;
+                    if (!is_file($index)) {
+                        @touch($index);
+                    }
                 }
 
-                return realpath(AI1WM_STORAGE_PATH) . DIRECTORY_SEPARATOR;
+                return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR;
             } else {
                 throw new Exception('Storage directory is not accessible (read/write).');
             }
