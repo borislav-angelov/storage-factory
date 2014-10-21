@@ -49,17 +49,23 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  */
 class StorageFile extends StorageAbstract
 {
-    protected $file = null;
+    protected $file    = null;
+
+    protected $handler = null;
 
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null) {
+    public function __construct($name = null, $path = null, $mode = 'r') {
+        // Set file
         if (empty($name)) {
             $this->file = tempnam($path, null);
         } else {
             $this->file = $path . DIRECTORY_SEPARATOR . $name;
         }
+
+        // Set handler
+        $this->handler = fopen($this->file, $mode);
     }
 
     /**
@@ -68,16 +74,16 @@ class StorageFile extends StorageAbstract
      * @return string
      */
     public function getName() {
-        return $this->file;
+        return basename($this->file);
     }
 
     /**
-     * Get file resource
+     * Get file path
      *
-     * @return resource
+     * @return string
      */
-    public function getResource() {
-        return fopen($this->file, 'a+');
+    public function getPath() {
+        return $this->file;
     }
 
     /**
@@ -87,6 +93,33 @@ class StorageFile extends StorageAbstract
      */
     public function getSize() {
         return filesize($this->file);
+    }
+
+    /**
+     * Set file pointer
+     *
+     * @return integer
+     */
+    public function setPointer($offset) {
+        return fseek($this->handler, $offset);
+    }
+
+    /**
+     * Get file pointer
+     *
+     * @return integer
+     */
+    public function getPointer() {
+        return ftell($this->handler);
+    }
+
+    /**
+     * Get file pointer
+     *
+     * @return boolean
+     */
+    public function close() {
+        return fclose($this->handler);
     }
 
     /**
