@@ -56,7 +56,7 @@ class StorageFile extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null, $mode = 'r') {
+    public function __construct($name = null, $path = null, $mode = 'a+') {
         if (empty($name)) {
             $this->file = tempnam($path, null);
         } else {

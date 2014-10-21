@@ -96,19 +96,29 @@ class StorageArea
     }
 
     /**
-     * Create a file with unique name
+     * Create a file
      *
-     * @param  string      $name Custom file name
+     * @param  string      $name File name
      * @return StorageFile       StorageFile instance
      */
-    public function makeFile($name = null) {
-        return new StorageFile($name, $this->getRootPath());
+    public function makeFile($name = null, $mode = 'a+') {
+        return new StorageFile($name, $this->getRootPath(), $mode);
     }
 
     /**
-     * Create a directory with unique name
+     * Open a file
      *
-     * @param  string           $name Custom directory name
+     * @param  string      $name File name
+     * @return StorageFile       StorageFile instance
+     */
+    public function openFile($name = null, $mode = 'a+') {
+        return new StorageFile($name, $this->getRootPath(), $mode);
+    }
+
+    /**
+     * Create a directory
+     *
+     * @param  string           $name Directory name
      * @return StorageDirectory       StorageDirectory instance
      */
     public function makeDirectory($name = null) {
