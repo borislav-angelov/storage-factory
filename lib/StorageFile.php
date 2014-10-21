@@ -114,7 +114,7 @@ class StorageFile extends StorageAbstract
     }
 
     /**
-     * Get file pointer
+     * Close file
      *
      * @return boolean
      */
