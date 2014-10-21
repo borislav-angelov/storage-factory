@@ -49,7 +49,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  */
 class StorageFile extends StorageAbstract
 {
-    protected $file    = null;
+    protected $file = null;
 
     protected $handler = null;
 
@@ -57,7 +57,6 @@ class StorageFile extends StorageAbstract
      * CTOR
      */
     public function __construct($name = null, $path = null, $mode = 'r') {
-        // Set file
         if (empty($name)) {
             $this->file = tempnam($path, null);
         } else {
@@ -84,6 +83,15 @@ class StorageFile extends StorageAbstract
      */
     public function getPath() {
         return $this->file;
+    }
+
+    /**
+     * Get file handler
+     *
+     * @return resource
+     */
+    public function getHandler() {
+        return $this->handler;
     }
 
     /**

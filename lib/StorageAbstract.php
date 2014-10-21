@@ -48,21 +48,35 @@
 abstract class StorageAbstract
 {
     /**
-     * Get file/directory name
+     * Get name
      *
      * @return string
      */
     abstract public function getName();
 
     /**
-     * Get file/directory resource
+     * Get path
+     *
+     * @return string
+     */
+    abstract public function getPath();
+
+    /**
+     * Get handler
      *
      * @return resource
      */
-    abstract public function getResource();
+    abstract public function getHandler();
 
     /**
-     * Delete file/directory
+     * Close
+     *
+     * @return boolean
+     */
+    abstract public function close();
+
+    /**
+     * Delete
      *
      * @return boolean
      */
