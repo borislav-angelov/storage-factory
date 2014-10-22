@@ -65,7 +65,6 @@ class StorageArea
         // Singleton
     }
 
-
     /**
      * Get storage absolute path
      *
