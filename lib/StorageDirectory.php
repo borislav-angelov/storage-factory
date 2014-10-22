@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.6.0
+ * @version   GIT: 2.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -45,12 +45,14 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageUtility.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.6.0
+ * @version   GIT: 2.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageDirectory extends StorageAbstract
 {
     protected $directory = null;
+
+    protected $handler = null;
 
     /**
      * CTOR
@@ -66,6 +68,9 @@ class StorageDirectory extends StorageAbstract
         if (!is_dir($this->directory)) {
             mkdir($this->directory);
         }
+
+        // Set handler
+        $this->handler = opendir($this->directory);
     }
 
     /**
@@ -74,16 +79,34 @@ class StorageDirectory extends StorageAbstract
      * @return string
      */
     public function getName() {
+        return basename($this->directory);
+    }
+
+    /**
+     * Get directory path
+     *
+     * @return string
+     */
+    public function getPath() {
         return $this->directory;
     }
 
     /**
-     * Get directory resource
+     * Get directory handler
      *
      * @return resource
      */
-    public function getResource() {
-        return opendir($this->directory);
+    public function getHandler() {
+        return $this->handler;
+    }
+
+    /**
+     * Close directory
+     *
+     * @return boolean
+     */
+    public function close() {
+        return closedir($this->handler);
     }
 
     /**

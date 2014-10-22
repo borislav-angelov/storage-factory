@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.6.0
+ * @version   GIT: 2.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -42,27 +42,41 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.6.0
+ * @version   GIT: 2.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 abstract class StorageAbstract
 {
     /**
-     * Get file/directory name
+     * Get name
      *
      * @return string
      */
     abstract public function getName();
 
     /**
-     * Get file/directory resource
+     * Get path
+     *
+     * @return string
+     */
+    abstract public function getPath();
+
+    /**
+     * Get handler
      *
      * @return resource
      */
-    abstract public function getResource();
+    abstract public function getHandler();
 
     /**
-     * Delete file/directory
+     * Close
+     *
+     * @return boolean
+     */
+    abstract public function close();
+
+    /**
+     * Delete
      *
      * @return boolean
      */

@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.6.0
+ * @version   GIT: 2.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,22 +44,27 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.6.0
+ * @version   GIT: 2.7.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFile extends StorageAbstract
 {
     protected $file = null;
 
+    protected $handler = null;
+
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null) {
+    public function __construct($name = null, $path = null, $mode = 'a+') {
         if (empty($name)) {
             $this->file = tempnam($path, null);
         } else {
             $this->file = $path . DIRECTORY_SEPARATOR . $name;
         }
+
+        // Set handler
+        $this->handler = fopen($this->file, $mode);
     }
 
     /**
@@ -68,16 +73,25 @@ class StorageFile extends StorageAbstract
      * @return string
      */
     public function getName() {
+        return basename($this->file);
+    }
+
+    /**
+     * Get file path
+     *
+     * @return string
+     */
+    public function getPath() {
         return $this->file;
     }
 
     /**
-     * Get file resource
+     * Get file handler
      *
      * @return resource
      */
-    public function getResource() {
-        return fopen($this->file, 'a+');
+    public function getHandler() {
+        return $this->handler;
     }
 
     /**
@@ -87,6 +101,51 @@ class StorageFile extends StorageAbstract
      */
     public function getSize() {
         return filesize($this->file);
+    }
+
+    /**
+     * Get file line
+     *
+     * @return string
+     */
+    public function getLine() {
+        return fgets($this->handler);
+    }
+
+    /**
+     * Write file line
+     *
+     * @return integer
+     */
+    public function writeLine($line) {
+        return fwrite( $this->handler, $line . PHP_EOL);
+    }
+
+    /**
+     * Set file pointer
+     *
+     * @return integer
+     */
+    public function setPointer($offset) {
+        return fseek($this->handler, $offset);
+    }
+
+    /**
+     * Get file pointer
+     *
+     * @return integer
+     */
+    public function getPointer() {
+        return ftell($this->handler);
+    }
+
+    /**
+     * Close file
+     *
+     * @return boolean
+     */
+    public function close() {
+        return fclose($this->handler);
     }
 
     /**
