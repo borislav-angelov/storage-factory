@@ -29,7 +29,7 @@
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.7.0
+ * @version   GIT: 2.8.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 
@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageAbstract.php';
  * @author    Bobby Angelov <bobby@servmask.com>
  * @copyright 2014 Yani Iliev, Bobby Angelov
  * @license   https://raw.github.com/borislav-angelov/storage-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.7.0
+ * @version   GIT: 2.8.0
  * @link      https://github.com/borislav-angelov/storage-factory/
  */
 class StorageFile extends StorageAbstract
@@ -104,26 +104,28 @@ class StorageFile extends StorageAbstract
     }
 
     /**
-     * Get file line
+     * Read file line
      *
      * @return string
      */
-    public function getLine() {
+    public function readLine() {
         return fgets($this->handler);
     }
 
     /**
      * Write file line
      *
+     * @param  string  $line File data
      * @return integer
      */
     public function writeLine($line) {
-        return fwrite( $this->handler, $line . PHP_EOL);
+        return fwrite($this->handler, $line . PHP_EOL);
     }
 
     /**
      * Set file pointer
      *
+     * @param  integer $offset Pointer position
      * @return integer
      */
     public function setPointer($offset) {
@@ -137,6 +139,26 @@ class StorageFile extends StorageAbstract
      */
     public function getPointer() {
         return ftell($this->handler);
+    }
+
+    /**
+     * Read file
+     *
+     * @param  integer $length Number of bytes to read
+     * @return string
+     */
+    public function read($length) {
+        return fread($this->handler, $length);
+    }
+
+    /**
+     * Write file
+     *
+     * @param  string  $data File data
+     * @return integer
+     */
+    public function write($data) {
+        return fwrite($this->handler, $data);
     }
 
     /**
