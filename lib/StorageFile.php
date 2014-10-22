@@ -104,6 +104,24 @@ class StorageFile extends StorageAbstract
     }
 
     /**
+     * Get file line
+     *
+     * @return string
+     */
+    public function getLine() {
+        return fgets($this->handler);
+    }
+
+    /**
+     * Write file line
+     *
+     * @return integer
+     */
+    public function writeLine($line) {
+        return fwrite( $this->handler, $line . PHP_EOL);
+    }
+
+    /**
      * Set file pointer
      *
      * @return integer
