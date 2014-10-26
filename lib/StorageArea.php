@@ -85,7 +85,7 @@ class StorageArea
                     }
                 }
 
-                return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR;
+                return AI1WM_STORAGE_PATH;
             } else {
                 throw new Exception('Storage directory is not accessible (read/write).');
             }
