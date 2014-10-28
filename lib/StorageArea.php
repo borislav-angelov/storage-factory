@@ -51,18 +51,32 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'StorageUtility.php';
  */
 class StorageArea
 {
-    protected static $instance = null;
+    // protected static $instance = null;
 
-    public static function getInstance() {
-        if (self::$instance === null) {
-            self::$instance = new self;
-        }
+    // public static function getInstance() {
+    //     if (self::$instance === null) {
+    //         self::$instance = new self;
+    //     }
 
-        return self::$instance;
+    //     return self::$instance;
+    // }
+
+    protected $path = null;
+
+    public function __construct($path) {
+        $this->path = $path;
+        // Singleton
+        //$this->$this->getRootPath() . DIRECTORY_SEPARATOR . $dir;
+
     }
 
-    private function __construct() {
-        // Singleton
+    public function getPath() {
+        $path = $this->getRootPath() . $this->path . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            @mkdir($path);
+        }
+
+        return $path;
     }
 
     /**
@@ -85,7 +99,7 @@ class StorageArea
                     }
                 }
 
-                return AI1WM_STORAGE_PATH;
+                return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR;
             } else {
                 throw new Exception('Storage directory is not accessible (read/write).');
             }
@@ -95,33 +109,30 @@ class StorageArea
     }
 
     /**
-     * Create a file
-     *
-     * @param  string      $name File name
-     * @return StorageFile       StorageFile instance
-     */
-    public function makeFile($name = null, $mode = 'a+') {
-        return new StorageFile($name, $this->getRootPath(), $mode);
-    }
-
-    /**
      * Open a file
      *
      * @param  string      $name File name
      * @return StorageFile       StorageFile instance
      */
-    public function openFile($name = null, $mode = 'a+') {
-        return new StorageFile($name, $this->getRootPath(), $mode);
+    public function openFile($name, $mode) {
+        return new StorageFile($name, $this->getPath(), $mode);
     }
 
     /**
-     * Create a directory
+     * Open a directory
      *
      * @param  string           $name Directory name
      * @return StorageDirectory       StorageDirectory instance
      */
-    public function makeDirectory($name = null) {
-        return new StorageDirectory($name, $this->getRootPath());
+    public function openDir($name) {
+        return new StorageDirectory($name, $this->getPath());
+    }
+
+    public function delete() {
+        // Remove child files and directories
+        if (StorageUtility::flush($this->getPath())) {
+            return rmdir($this->getPath());
+        }
     }
 
     /**
@@ -130,10 +141,6 @@ class StorageArea
      * @return boolean
      */
     public function flush() {
-        if (defined('AI1WM_STORAGE_INDEX')) {
-            return StorageUtility::flush($this->getRootPath(), array(AI1WM_STORAGE_INDEX));
-        }
-
-        return StorageUtility::flush($this->getRootPath());
+        return StorageUtility::flush($this->getPath());
     }
 }

@@ -56,12 +56,9 @@ class StorageFile extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null, $mode = 'a+') {
-        if (empty($name)) {
-            $this->file = tempnam($path, null);
-        } else {
-            $this->file = $path . DIRECTORY_SEPARATOR . $name;
-        }
+    public function __construct($name, $path, $mode) {
+        // Set file
+        $this->file = $path . DIRECTORY_SEPARATOR . $name;
 
         // Set handler
         $this->handler = fopen($this->file, $mode);
@@ -77,11 +74,11 @@ class StorageFile extends StorageAbstract
     }
 
     /**
-     * Get file path
+     * Get path name
      *
      * @return string
      */
-    public function getPath() {
+    public function getPathname() {
         return $this->file;
     }
 

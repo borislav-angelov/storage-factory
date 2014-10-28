@@ -57,12 +57,9 @@ class StorageDirectory extends StorageAbstract
     /**
      * CTOR
      */
-    public function __construct($name = null, $path = null) {
-        if (empty($name)) {
-            $this->directory = $path . DIRECTORY_SEPARATOR . uniqid() . DIRECTORY_SEPARATOR;
-        } else {
-            $this->directory = $path . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
-        }
+    public function __construct($name, $path) {
+        // Set directory
+        $this->directory = $path . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
 
         // Create directory
         if (!is_dir($this->directory)) {
@@ -87,7 +84,7 @@ class StorageDirectory extends StorageAbstract
      *
      * @return string
      */
-    public function getPath() {
+    public function getPathname() {
         return $this->directory;
     }
 

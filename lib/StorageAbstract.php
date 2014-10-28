@@ -59,7 +59,7 @@ abstract class StorageAbstract
      *
      * @return string
      */
-    abstract public function getPath();
+    abstract public function getPathname();
 
     /**
      * Get handler
